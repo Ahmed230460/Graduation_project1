@@ -24,8 +24,8 @@ from transformers import MarianMTModel, MarianTokenizer
 @st.cache_resource
 def load_models():
     # YOLOv12
-   yolo_model = YOLO("yolov8n.pt")  # يتحمل من ultralytics مباشرة
-
+    yolo_model = YOLO("yolov8n.pt")  # يتحمل من ultralytics مباشرة
+    
     # ViViT
     processor = VivitImageProcessor.from_pretrained("prathameshdalal/vivit-b-16x2-kinetics400-UCF-Crime")
     vivit_model = VivitForVideoClassification.from_pretrained("prathameshdalal/vivit-b-16x2-kinetics400-UCF-Crime")
