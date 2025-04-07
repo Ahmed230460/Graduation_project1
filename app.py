@@ -3,7 +3,7 @@
 app.py
 
 This is the main application file for the Video Story Generator.
-It processes uploaded videos, detects anomalies, and generates a story.
+It processes uploaded videos, detects anomalies, generates a story, and provides translation options.
 """
 
 import streamlit as st
@@ -13,6 +13,7 @@ import av
 import torch
 from ultralytics import YOLO
 from transformers import VivitForVideoClassification, VivitImageProcessor
+from transformers import MarianMTModel, MarianTokenizer  # Add these imports for translation
 import google.generativeai as genai
 import os
 import io
@@ -46,7 +47,8 @@ st.markdown("""
 ### Usage Instructions
 1. Upload a video (up to 200 MB) in MP4 or AVI format.
 2. Wait for the video to be processed.
-3. The results (classification and story) will appear below.
+3. The results (classification and story) will appear below in English.
+4. Use the buttons to translate the story into other languages.
 """)
 
 # Set the title of the app
@@ -172,7 +174,7 @@ def anomaly_detection(video_path, processor, vivit_model):
 
     return vivit_model.config.id2label[predicted_class]
 
-# Function to generate a story based on the video
+# Function to generate a story based on the video (in English by default)
 def generate_story(video_path, prediction, gemini_model):
     cap = cv2.VideoCapture(video_path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -193,15 +195,43 @@ def generate_story(video_path, prediction, gemini_model):
 
     descriptions = {}
     for frame_path in frames:
-        prompt = f"This frame is from a video classified as '{prediction}'. Describe the event in one sentence in Arabic."
+        prompt = f"This frame is from a video classified as '{prediction}'. Describe the event in one sentence in English."
         with open(frame_path, "rb") as img_file:
             image_data = Image.open(io.BytesIO(img_file.read()))
         response = gemini_model.generate_content([prompt, image_data])
         descriptions[frame_path] = response.text
 
-    summary_prompt = "Here are multiple descriptions of frames from a video in Arabic:\n" + "\n".join(descriptions.values()) + "\nProvide a concise summary of the overall event in Arabic."
+    summary_prompt = "Here are multiple descriptions of frames from a video in English:\n" + "\n".join(descriptions.values()) + "\nProvide a concise summary of the overall event in English."
     summary_response = gemini_model.generate_content(summary_prompt)
     return summary_response.text
+
+# Function to translate text using MarianMT
+@st.cache_resource
+def translate_text(text, target_lang):
+    # Model names for different languages (from English)
+    model_mapping = {
+        "es": "Helsinki-NLP/opus-mt-en-es",  # Spanish
+        "fr": "Helsinki-NLP/opus-mt-en-fr",  # French
+        "de": "Helsinki-NLP/opus-mt-en-de",  # German
+        "ar": "Helsinki-NLP/opus-mt-en-ar",  # Arabic
+    }
+
+    if target_lang not in model_mapping:
+        raise ValueError(f"Unsupported target language: {target_lang}")
+
+    # Load tokenizer and model for the target language
+    model_name = model_mapping[target_lang]
+    tokenizer = MarianTokenizer.from_pretrained(model_name)
+    translation_model = MarianMTModel.from_pretrained(model_name)
+
+    # Tokenize input text
+    inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
+
+    # Generate translation
+    translated = translation_model.generate(**inputs)
+    translated_text = tokenizer.decode(translated[0], skip_special_tokens=True)
+
+    return translated_text
 
 # Main function to handle the app logic
 def main():
@@ -223,7 +253,7 @@ def main():
             # Detect anomaly
             prediction = anomaly_detection(keyframes_video, processor, vivit_model)
             
-            # Generate story
+            # Generate story in English
             story = generate_story(keyframes_video, prediction, gemini_model)
 
         # Display the processed video
@@ -236,12 +266,31 @@ def main():
                 st.subheader("Classification")
                 st.write(prediction)
             with col2:
-                st.subheader("Story")
+                st.subheader("Story (English)")
                 st.write(story)
 
-        # Add a download button for the story
+        # Add translation buttons for the story
+        st.subheader("Translate Story")
+        target_languages = ["es", "fr", "de", "ar"]
+        language_names = {"es": "Spanish", "fr": "French", "de": "German", "ar": "Arabic"}
+        cols = st.columns(len(target_languages))  # Create columns for buttons
+        translations = {}  # Store translations to avoid re-computing
+
+        for idx, lang in enumerate(target_languages):
+            with cols[idx]:
+                if st.button(f"To {language_names[lang]}"):
+                    if lang not in translations:
+                        # Translate the story to the target language
+                        with st.spinner(f"Translating to {language_names[lang]}..."):
+                            translated_story = translate_text(story, lang)
+                            translations[lang] = translated_story
+                    # Display the translated story
+                    st.write(f"Story ({language_names[lang]}):")
+                    st.write(translations[lang])
+
+        # Add a download button for the story (English version)
         st.download_button(
-            label="Download Story",
+            label="Download Story (English)",
             data=story,
             file_name="video_description.txt",
             mime="text/plain"
