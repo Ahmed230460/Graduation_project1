@@ -14,7 +14,7 @@ import av
 import torch
 from ultralytics import YOLO
 from transformers import VivitForVideoClassification, VivitImageProcessor
-import genai
+import google.generativeai as genai
 import os
 import io
 from PIL import Image
