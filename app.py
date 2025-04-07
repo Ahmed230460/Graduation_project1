@@ -27,8 +27,8 @@ def load_models():
     yolo_model = YOLO("yolov8n.pt")  # يتحمل من ultralytics مباشرة
     
     # ViViT
-    processor = VivitImageProcessor.from_pretrained("prathameshdalal/vivit-b-16x2-kinetics400-UCF-Crime")
-    vivit_model = VivitForVideoClassification.from_pretrained("prathameshdalal/vivit-b-16x2-kinetics400-UCF-Crime")
+    processor = VivitImageProcessor.from_pretrained("prathameshdalal/vivit-b-16x2-kinetics400-ucfcrime")
+    vivit_model = VivitForVideoClassification.from_pretrained("prathameshdalal/vivit-b-16x2-kinetics400-ucfcrime")
 
     # Gemini (مع API Key)
     genai.configure(api_key="AIzaSyCZFf2r-fmE9uRQjKebHfF_MZhDKwiZP7A")
