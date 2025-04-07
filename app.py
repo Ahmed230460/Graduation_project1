@@ -221,8 +221,8 @@ def translate_text(text, target_lang):
 
     # Load tokenizer and model for the target language
     model_name = model_mapping[target_lang]
-    tokenizer = MarianTokenizer.from_pretrained(model_name)
-    translation_model = MarianMTModel.from_pretrained(model_name)
+    tokenizer = MarianTokenizer.from_pretrained(model_name, token=os.getenv("HF_TOKEN"))
+    translation_model = MarianMTModel.from_pretrained(model_name, token=os.getenv("HF_TOKEN"))
 
     # Tokenize input text
     inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
