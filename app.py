@@ -171,13 +171,13 @@ def generate_story(video_path, prediction, gemini_model):
 # الواجهة الرئيسية
 def main():
     st.title("Video Story Generator")
-    uploaded_file = st.file_uploader("ارفع فيديو", type=["mp4", "avi"])
+    uploaded_file = st.file_uploader(" Upload Video", type=["mp4", "avi"])
 
     if uploaded_file is not None:
         with open("input_video.mp4", "wb") as f:
             f.write(uploaded_file.read())
 
-        st.write("جاري المعالجة...")
+        st.write("Processing...")
         yolo_model, processor, vivit_model, gemini_model = load_models()
 
         # Preprocessing
@@ -188,11 +188,11 @@ def main():
 
         # Anomaly Detection
         prediction = anomaly_detection(keyframes_video, processor, vivit_model)
-        st.write(f"التصنيف: {prediction}")
+        st.write(f"Video Classification: {prediction}")
 
         # Story Generation
         story = generate_story(keyframes_video, prediction, gemini_model)
-        st.write("القصة المولدة:")
+        st.write(" Story Generation:")
         st.write(story)
 
 if __name__ == "__main__":
