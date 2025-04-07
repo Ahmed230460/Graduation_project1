@@ -1,0 +1,9 @@
+streamlit
+opencv-python
+numpy
+pyav
+torch
+ultralytics
+transformers
+google-generativeai
+pillow
