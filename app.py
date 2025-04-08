@@ -46,6 +46,10 @@ st.markdown("""
         color: white !important;
     }
     .center-container {
+        width: 100vw;  /* Use the full viewport width */
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);  /* Center the container relative to the viewport */
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -66,6 +70,12 @@ st.markdown("""
     .center-text {
         text-align: center;
         width: 100%;
+    }
+    .content-container {
+        width: 100%;
+        max-width: 1200px;  /* Limit the width of the main content */
+        margin: 0 auto;  /* Center the content within the main area */
+        padding: 0 20px;
     }
     .sidebar .sidebar-content {
         background-color: #2A2A2A;
@@ -113,11 +123,14 @@ def display_logo():
 
 # Home Page
 if page == "Home":
-    # Center the logo and tagline together
+    # Center the logo across the entire page
     st.markdown('<div class="center-container">', unsafe_allow_html=True)
     display_logo()
     st.markdown('<h3 class="center-text">Echolens: Turning Videos into Stories with AI</h3>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
+
+    # Wrap the rest of the content in a centered container
+    st.markdown('<div class="content-container">', unsafe_allow_html=True)
 
     # Display user instructions
     st.markdown("""
@@ -458,13 +471,18 @@ if page == "Home":
     if __name__ == "__main__":
         main()
 
+    st.markdown('</div>', unsafe_allow_html=True)  # Close content-container
+
 # About Us Page
 elif page == "About Us":
-    # Center the logo and title together
+    # Center the logo across the entire page
     st.markdown('<div class="center-container">', unsafe_allow_html=True)
     display_logo()
     st.markdown('<h1 class="center-text">About Us</h1>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
+
+    # Wrap the rest of the content in a centered container
+    st.markdown('<div class="content-container">', unsafe_allow_html=True)
 
     st.markdown("""
     We are the team behind **Echolens**, a project dedicated to transforming videos into meaningful stories using AI. Our team consists of passionate developers and researchers working together to push the boundaries of video analysis and storytelling.
@@ -504,13 +522,18 @@ elif page == "About Us":
         </div>
         """, unsafe_allow_html=True)
 
+    st.markdown('</div>', unsafe_allow_html=True)  # Close content-container
+
 # Contact Us Page
 elif page == "Contact Us":
-    # Center the logo and title together
+    # Center the logo across the entire page
     st.markdown('<div class="center-container">', unsafe_allow_html=True)
     display_logo()
     st.markdown('<h1 class="center-text">Contact Us</h1>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
+
+    # Wrap the rest of the content in a centered container
+    st.markdown('<div class="content-container">', unsafe_allow_html=True)
 
     st.markdown("""
     Have questions or feedback? We'd love to hear from you! Reach out to us through the following channels.
@@ -530,10 +553,14 @@ elif page == "Contact Us":
         if submit_button:
             st.success(f"Thank you, {name}! We've received your message and will get back to you at {email} soon.")
 
+    st.markdown('</div>', unsafe_allow_html=True)  # Close content-container
+
 # Footer
+st.markdown('<div class="content-container">', unsafe_allow_html=True)
 st.markdown("""
 <div class="footer">
     <p>© 2025 Echolens. All rights reserved.</p>
     <p><a href="https://github.com/echolens">GitHub</a> | <a href="mailto:contact@echolens.com">Email Us</a></p>
 </div>
 """, unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)  # Close content-container
