@@ -3,7 +3,8 @@
 app.py
 
 This is the main application file for the Video Story Generator.
-It processes uploaded videos, detects anomalies, generates a story, and provides translation options.
+It processes uploaded videos, detects anomalies, generates a story, provides translation options,
+and displays detailed information about the video and detected objects.
 """
 
 import streamlit as st
@@ -19,6 +20,7 @@ import os
 import io
 from PIL import Image
 from google.api_core.exceptions import ResourceExhausted
+from collections import Counter
 
 # Add custom CSS for styling the UI
 st.markdown("""
@@ -48,7 +50,7 @@ st.markdown("""
 ### Usage Instructions
 1. Upload a video (up to 200 MB) in MP4 or AVI format.
 2. Wait for the video to be processed.
-3. The results (classification and story) will appear below in English.
+3. The results (classification, story, and video details) will appear below in English.
 4. Use the buttons to translate the story into other languages.
 """)
 
@@ -74,6 +76,16 @@ def load_models():
 
     return yolo_model, processor, vivit_model, gemini_model
 
+# Function to calculate video duration in seconds
+def get_video_duration(video_path):
+    cap = cv2.VideoCapture(video_path)
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    cap.release()
+    if fps == 0:
+        return 0
+    return frame_count / fps
+
 # Function to preprocess the video (resize and normalize)
 def preprocess_video(input_path, output_path, target_size=(224, 224)):
     cap = cv2.VideoCapture(input_path)
@@ -96,12 +108,12 @@ def preprocess_video(input_path, output_path, target_size=(224, 224)):
     out.release()
     return output_path
 
-# Function to extract keyframes from the video
-def extract_keyframes(video_path, output_path="significant_keyframes_output.mp4"):
+# Function to extract keyframes from the video and collect additional information
+def extract_keyframes(video_path, yolo_model, output_path="significant_keyframes_output.mp4"):
     cap = cv2.VideoCapture(video_path)
     ret, prev_frame = cap.read()
     if not ret:
-        return None
+        return None, [], {}, 0
 
     fps = cap.get(cv2.CAP_PROP_FPS)
     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -115,8 +127,8 @@ def extract_keyframes(video_path, output_path="significant_keyframes_output.mp4"
     motion_history = []
     saved_frames = 0
     peak_frame = None
-
-    yolo_model = load_models()[0]  # Load YOLO model for keyframe extraction
+    event_timestamps = []  # To store timestamps of detected events
+    all_detected_objects = []  # To store detected objects across all frames
 
     while cap.isOpened():
         ret, current_frame = cap.read()
@@ -124,6 +136,14 @@ def extract_keyframes(video_path, output_path="significant_keyframes_output.mp4"
             if event_active and peak_frame is not None:
                 out.write(peak_frame)
                 saved_frames += 1
+                timestamp = frame_count / fps
+                event_timestamps.append(timestamp)
+                # Run YOLO on the peak frame to detect objects
+                results = yolo_model(peak_frame)
+                for result in results:
+                    for box in result.boxes:
+                        label = result.names[int(box.cls)]
+                        all_detected_objects.append(label)
             break
 
         frame_count += 1
@@ -147,13 +167,25 @@ def extract_keyframes(video_path, output_path="significant_keyframes_output.mp4"
             if peak_frame is not None:
                 out.write(peak_frame)
                 saved_frames += 1
+                timestamp = frame_count / fps
+                event_timestamps.append(timestamp)
+                # Run YOLO on the peak frame to detect objects
+                results = yolo_model(peak_frame)
+                for result in results:
+                    for box in result.boxes:
+                        label = result.names[int(box.cls)]
+                        all_detected_objects.append(label)
 
         prev_gray = current_gray
         prev_frame = current_frame.copy()
 
     cap.release()
     out.release()
-    return output_path
+
+    # Count the occurrences of each object type
+    object_counts = dict(Counter(all_detected_objects))
+
+    return output_path, event_timestamps, object_counts, saved_frames
 
 # Function to detect anomalies in the video
 def anomaly_detection(video_path, processor, vivit_model):
@@ -268,11 +300,17 @@ def main():
         with st.spinner("Processing..."):
             yolo_model, processor, vivit_model, gemini_model = load_models()
             
+            # Calculate original video duration
+            original_duration = get_video_duration("input_video.mp4")
+            
             # Preprocess the video
             preprocessed_video = preprocess_video("input_video.mp4", "preprocessed_video.mp4")
             
-            # Extract keyframes
-            keyframes_video = extract_keyframes(preprocessed_video)
+            # Extract keyframes and collect event timings and objects
+            keyframes_video, event_timestamps, object_counts, saved_frames = extract_keyframes(preprocessed_video, yolo_model)
+            
+            # Calculate keyframes video duration
+            keyframes_duration = get_video_duration(keyframes_video) if keyframes_video else 0
             
             # Detect anomaly
             prediction = anomaly_detection(keyframes_video, processor, vivit_model)
@@ -282,6 +320,24 @@ def main():
 
         # Display the processed video
         st.video("input_video.mp4")
+
+        # Display video details in an expander
+        with st.expander("Video Details"):
+            st.subheader("Video Information")
+            st.write(f"**Original Video Duration**: {original_duration:.2f} seconds")
+            st.write(f"**Keyframes Video Duration**: {keyframes_duration:.2f} seconds")
+            st.write("**Event Timings (seconds)**:")
+            if event_timestamps:
+                for i, timestamp in enumerate(event_timestamps, 1):
+                    st.write(f"- Event {i}: {timestamp:.2f} seconds")
+            else:
+                st.write("- No significant events detected.")
+            st.write("**Detected Objects (by YOLO)**:")
+            if object_counts:
+                for obj, count in object_counts.items():
+                    st.write(f"- {obj}: {count}")
+            else:
+                st.write("- No objects detected.")
 
         # Display results in an expander
         with st.expander("Processing Results"):
