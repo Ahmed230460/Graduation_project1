@@ -62,7 +62,7 @@ st.markdown("""
         justify-content: center;
         align-items: center;
         margin-bottom: 10px;
-        margin-left: 50px;
+        margin-left: 50px;  /* إزاحة اللوجو لليمين */
     }
     .center-image img {
         width: 300px;  /* Set a fixed width */
