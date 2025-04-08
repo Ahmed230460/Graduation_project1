@@ -77,15 +77,18 @@ st.markdown("""
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
+        width: 100%;
+        max-width: 1200px; /* Match the content container width */
     }
     .center-image {
         display: flex;
         align-items: center;
         justify-content: flex-end; /* Move logo to the right */
         width: 100%;
-        max-width: 800px; /* Match the content container width */
+        max-width: 1200px; /* Match the content container width */
         margin-bottom: 10px;
+        padding-right: 20px; /* Add some padding to adjust the logo position */
     }
     .center-image img {
         width: 200px;
@@ -99,6 +102,7 @@ st.markdown("""
     .center-text {
         text-align: center;
         width: 100%;
+        font-size: 1.2rem; /* Slightly larger font for better readability */
     }
 
     /* Content Container */
@@ -108,8 +112,9 @@ st.markdown("""
         align-items: center;
         justify-content: center;
         width: 100%;
-        max-width: 800px;
+        max-width: 1200px; /* Wider for desktop */
         padding: 20px;
+        box-sizing: border-box;
     }
 
     /* Instructions Icon and Popup */
@@ -148,7 +153,8 @@ st.markdown("""
         border-radius: 15px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         z-index: 1000;
-        width: 450px;
+        width: 90%;
+        max-width: 450px;
         text-align: left;
         border: 1px solid #FF4B4B;
     }
@@ -195,7 +201,7 @@ st.markdown("""
         border: 2px solid transparent;
         border-image: linear-gradient(45deg, #FF4B4B, #D32F2F) 1;
         width: 100%;
-        max-width: 500px;
+        max-width: 600px; /* Slightly wider for desktop */
     }
     .stFileUploader {
         background: transparent !important;
@@ -226,6 +232,8 @@ st.markdown("""
         border-radius: 10px;
         margin: 10px 0;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 1200px; /* Match content container */
     }
     .stExpander summary {
         background: linear-gradient(45deg, #FF4B4B, #D32F2F);
@@ -260,6 +268,8 @@ st.markdown("""
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 10px;
         margin: 20px 0;
+        width: 100%;
+        max-width: 1200px; /* Match content container */
     }
 
     /* Sidebar */
@@ -277,6 +287,8 @@ st.markdown("""
         margin: 10px;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
         border: 1px solid #FF4B4B;
+        width: 100%;
+        max-width: 300px;
     }
     .developer-card img {
         border-radius: 50%;
@@ -302,6 +314,47 @@ st.markdown("""
     }
     a:hover {
         text-decoration: underline;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .logo-container {
+            margin-bottom: 20px;
+        }
+        .center-image {
+            justify-content: center; /* Center the logo on mobile */
+            padding-right: 0;
+        }
+        .center-text {
+            font-size: 1rem; /* Slightly smaller font for mobile */
+        }
+        .content-container {
+            padding: 10px;
+            max-width: 100%;
+        }
+        .file-uploader-card {
+            max-width: 100%;
+            padding: 15px;
+        }
+        .stExpander {
+            max-width: 100%;
+        }
+        .translate-buttons {
+            max-width: 100%;
+        }
+        .developer-card {
+            max-width: 100%;
+        }
+    }
+
+    @media (min-width: 769px) {
+        .center-image {
+            justify-content: flex-end; /* Keep logo on the right for desktop */
+            padding-right: 40px; /* Adjust padding for desktop */
+        }
+        .center-text {
+            font-size: 1.2rem;
+        }
     }
     </style>
     """, unsafe_allow_html=True)
@@ -332,7 +385,7 @@ if page == "Home":
     </div>
     """, unsafe_allow_html=True)
 
-    # Display the logo centered
+    # Display the logo shifted to the right
     st.markdown('<div class="logo-container">', unsafe_allow_html=True)
     st.markdown('<div class="center-image">', unsafe_allow_html=True)
     st.image("logo_transparent.png")  # Width is controlled via CSS
