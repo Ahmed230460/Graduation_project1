@@ -48,18 +48,19 @@ st.markdown("""
     .logo-container {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        margin-top: 20px;
-        position: relative;
+        align-items: center; /* يخلي المحتوى كله في النص */
+        justify-content: center;
+        margin-top: 50px; /* ممكن تزود أو تقلل حسب ذوقك */
         z-index: 999;
+        position: relative; /* مهم: لازم تكون relative مش absolute */
     }
     
     .center-image {
         display: flex;
         justify-content: center;
         margin-bottom: 10px;
-        width: 100%;
     }
+
 
     .center-image img {
         width: 300px;  /* Set a fixed width */
