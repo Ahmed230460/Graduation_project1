@@ -47,14 +47,13 @@ st.markdown("""
     }
     .logo-container {
         width: 100vw;  /* Full viewport width */
-        position: fixed;  /* Fix the position to the top */
-        top: 0;
-        left: 300px;  /* إزاحة اللوجو والتاجلاين لليمين */
+        position: relative;  /* Change to relative */
         display: flex;
         flex-direction: column;
         align-items: center;
         z-index: 999;  /* Ensure it stays above other elements */
         padding: 20px 0;
+        transform: translateX(300px);  /* إزاحة اللوجو والتاجلاين لليمين */
     }
     .center-image {
         display: flex;
@@ -75,7 +74,7 @@ st.markdown("""
         max-width: 1200px;  /* Limit the width of the main content */
         margin: 0 auto;  /* Center the content within the main area */
         padding: 0 20px;
-        margin-top: 150px;  /* Add space below the fixed logo */
+        margin-top: 0;  /* Adjust space below the logo */
     }
     .sidebar .sidebar-content {
         background-color: #2A2A2A;
