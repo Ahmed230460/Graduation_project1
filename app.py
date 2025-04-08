@@ -46,22 +46,18 @@ st.markdown("""
         color: white !important;
     }
     .logo-container {
+        position: absolute;  /* استخدام absolute لتحديد الموقع بدقة */
+        top: 20px;  /* المسافة من أعلى الصفحة */
+        left: 300px;  /* المسافة من الشمال (تحريك اللوجو لليمين) */
         display: flex;
         flex-direction: column;
-        align-items: center; /* يخلي المحتوى كله في النص */
-        justify-content: center;
-        margin-top: 50px; /* ممكن تزود أو تقلل حسب ذوقك */
-        z-index: 999;
-        position: relative; /* مهم: لازم تكون relative مش absolute */
+        z-index: 999;  /* التأكد إن اللوجو فوق العناصر التانية */
     }
-    
     .center-image {
         display: flex;
-        justify-content: center;
+        align-items: center;
         margin-bottom: 10px;
     }
-
-
     .center-image img {
         width: 300px;  /* Set a fixed width */
         height: auto;  /* Maintain aspect ratio */
@@ -109,6 +105,34 @@ st.markdown("""
     a:hover {
         text-decoration: underline;
     }
+    /* Hover effect for Usage Instructions */
+    .instructions-container {
+        position: relative;
+        display: inline-block;
+    }
+    .instructions-title {
+        color: #FF4B4B;
+        cursor: pointer;
+    }
+    .instructions-tooltip {
+        visibility: hidden;
+        width: 300px;
+        background-color: #2A2A2A;
+        color: white;
+        text-align: left;
+        padding: 10px;
+        border-radius: 5px;
+        position: absolute;
+        z-index: 1;
+        top: 100%;
+        left: 0;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .instructions-container:hover .instructions-tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -133,14 +157,18 @@ if page == "Home":
     # Wrap the rest of the content in a centered container
     st.markdown('<div class="content-container">', unsafe_allow_html=True)
 
-    # Display user instructions
+    # Display user instructions with hover effect
     st.markdown("""
-    ### Usage Instructions
-    1. Upload a video (up to 200 MB) in MP4 or AVI format.
-    2. Wait for the video to be processed.
-    3. The results (classification, story, and video details) will appear below in English.
-    4. Use the buttons to translate the story into other languages.
-    """)
+    <div class="instructions-container">
+        <h3 class="instructions-title">Usage Instructions</h3>
+        <span class="instructions-tooltip">
+            1. Upload a video (up to 200 MB) in MP4 or AVI format.<br>
+            2. Wait for the video to be processed.<br>
+            3. The results (classification, story, and video details) will appear below in English.<br>
+            4. Use the buttons to translate the story into other languages.
+        </span>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Set the title of the app
     st.title("Video Story Generator")
