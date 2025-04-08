@@ -53,16 +53,14 @@ st.markdown("""
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         z-index: 999;  /* Ensure it stays above other elements */
         padding: 20px 0;
+        margin-left: 100px;  /* إزاحة اللوجو والتاجلاين لليمين */
     }
     .center-image {
         display: flex;
-        justify-content: center;
         align-items: center;
         margin-bottom: 10px;
-        margin-left: 100px;  /* إزاحة اللوجو لليمين */
     }
     .center-image img {
         width: 300px;  /* Set a fixed width */
