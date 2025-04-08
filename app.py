@@ -42,8 +42,18 @@ st.markdown("""
     .stFileUploader label {
         color: white !important;
     }
+    .center-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     </style>
     """, unsafe_allow_html=True)
+
+# Display the logo at the top
+st.markdown('<div class="center-image">', unsafe_allow_html=True)
+st.image("logo.png", width=200)  # Adjust width as needed
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Display user instructions
 st.markdown("""
@@ -208,15 +218,15 @@ def anomaly_detection(video_path, processor, vivit_model):
 
     return vivit_model.config.id2label[predicted_class]
 
-# Function to generate a story based on the video (in English by default)
+# Function to generate a story based on the keyframes video (in English by default)
 def generate_story(video_path, prediction, gemini_model):
-    cap = cv2.VideoCapture(video_path)
+    cap = cv2.VideoCapture(video_path)  # Use the keyframes video
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     if total_frames == 0:
         return f"A video classified as '{prediction}' was processed, but no story could be generated due to an empty video."
 
     # Reduce the number of frames to describe to avoid quota issues
-    step = max(1, total_frames // 3)  # Extract only 3 frames
+    step = max(1, total_frames // 3)  # Extract up to 3 frames
     frames = []
     frame_idx = 0
 
@@ -316,7 +326,7 @@ def main():
             # Detect anomaly
             prediction = anomaly_detection(keyframes_video, processor, vivit_model)
             
-            # Generate story in English
+            # Generate story in English based on the keyframes video
             story = generate_story(keyframes_video, prediction, gemini_model)
 
         # Display the processed video
