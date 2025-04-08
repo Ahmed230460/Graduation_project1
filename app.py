@@ -49,7 +49,8 @@ st.markdown("""
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 20px;
+        margin-top: 20px;  /* Add some top margin */
+        margin-bottom: 30px;  /* Add spacing between logo and content below */
     }
     .sidebar .sidebar-content {
         background-color: #2A2A2A;
