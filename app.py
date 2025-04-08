@@ -55,7 +55,7 @@ st.markdown("""
         align-items: center;
         z-index: 999;  /* Ensure it stays above other elements */
         padding: 20px 0;
-        margin-left: 100px;  /* إزاحة اللوجو والتاجلاين لليمين */
+        margin-left: 300px;  /* إزاحة اللوجو والتاجلاين لليمين */
     }
     .center-image {
         display: flex;
