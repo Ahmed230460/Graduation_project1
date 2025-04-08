@@ -219,19 +219,23 @@ def translate_text(text, target_lang):
     if target_lang not in model_mapping:
         raise ValueError(f"Unsupported target language: {target_lang}")
 
-    # Load tokenizer and model for the target language
-    model_name = model_mapping[target_lang]
-    tokenizer = MarianTokenizer.from_pretrained(model_name, token=os.getenv("HF_TOKEN"))
-    translation_model = MarianMTModel.from_pretrained(model_name, token=os.getenv("HF_TOKEN"))
+    try:
+        # Load tokenizer and model for the target language
+        model_name = model_mapping[target_lang]
+        tokenizer = MarianTokenizer.from_pretrained(model_name, use_auth_token=os.getenv("HF_TOKEN"))
+        translation_model = MarianMTModel.from_pretrained(model_name, use_auth_token=os.getenv("HF_TOKEN"))
 
-    # Tokenize input text
-    inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
+        # Tokenize input text
+        inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
 
-    # Generate translation
-    translated = translation_model.generate(**inputs)
-    translated_text = tokenizer.decode(translated[0], skip_special_tokens=True)
+        # Generate translation
+        translated = translation_model.generate(**inputs)
+        translated_text = tokenizer.decode(translated[0], skip_special_tokens=True)
 
-    return translated_text
+        return translated_text
+    except Exception as e:
+        st.error(f"Error during translation to {target_lang}: {str(e)}")
+        return None
 
 # Main function to handle the app logic
 def main():
