@@ -74,35 +74,39 @@ st.markdown("""
 
     /* Logo Container */
     .logo-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        display: block; /* Remove flex to allow manual positioning */
         margin-bottom: 30px;
         width: 100%;
-        max-width: 1200px; /* Match the content container width */
+        max-width: 1200px;
     }
-    .center-image {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end; /* Move logo to the right */
-        width: 100%;
-        max-width: 1200px; /* Match the content container width */
-        margin-bottom: 10px;
-        padding-right: 20px; /* Add some padding to adjust the logo position */
-    }
-    .center-image img {
-        width: 200px;
-        height: auto;
-        max-width: 100%;
+
+    /* Custom class for logo positioning */
+    .logo-image {
+        width: 200px; /* You can change this */
+        height: auto; /* Maintain aspect ratio */
         transition: transform 0.3s ease;
     }
-    .center-image img:hover {
+    .logo-image:hover {
         transform: translateY(-5px);
     }
-    .center-text {
-        text-align: center;
-        width: 100%;
-        font-size: 1.2rem; /* Slightly larger font for better readability */
+
+    /* Class to move logo to the right */
+    .logo-right {
+        float: right;
+        margin-right: 20px; /* Adjust this to control how far from the right edge */
+    }
+
+    /* Class to move logo to the left */
+    .logo-left {
+        float: left;
+        margin-left: 20px; /* Adjust this to control how far from the left edge */
+    }
+
+    /* Clearfix to prevent layout issues with float */
+    .clearfix::after {
+        content: "";
+        display: table;
+        clear: both;
     }
 
     /* Content Container */
@@ -112,7 +116,7 @@ st.markdown("""
         align-items: center;
         justify-content: center;
         width: 100%;
-        max-width: 1200px; /* Wider for desktop */
+        max-width: 1200px;
         padding: 20px;
         box-sizing: border-box;
     }
@@ -201,7 +205,7 @@ st.markdown("""
         border: 2px solid transparent;
         border-image: linear-gradient(45deg, #FF4B4B, #D32F2F) 1;
         width: 100%;
-        max-width: 600px; /* Slightly wider for desktop */
+        max-width: 600px;
     }
     .stFileUploader {
         background: transparent !important;
@@ -233,7 +237,7 @@ st.markdown("""
         margin: 10px 0;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
         width: 100%;
-        max-width: 1200px; /* Match content container */
+        max-width: 1200px;
     }
     .stExpander summary {
         background: linear-gradient(45deg, #FF4B4B, #D32F2F);
@@ -269,7 +273,7 @@ st.markdown("""
         gap: 10px;
         margin: 20px 0;
         width: 100%;
-        max-width: 1200px; /* Match content container */
+        max-width: 1200px;
     }
 
     /* Sidebar */
@@ -321,12 +325,13 @@ st.markdown("""
         .logo-container {
             margin-bottom: 20px;
         }
-        .center-image {
-            justify-content: center; /* Center the logo on mobile */
-            padding-right: 0;
+        .logo-image {
+            width: 150px; /* Smaller logo on mobile */
         }
-        .center-text {
-            font-size: 1rem; /* Slightly smaller font for mobile */
+        .logo-right, .logo-left {
+            float: none; /* Remove float on mobile */
+            display: block;
+            margin: 0 auto; /* Center on mobile */
         }
         .content-container {
             padding: 10px;
@@ -344,16 +349,6 @@ st.markdown("""
         }
         .developer-card {
             max-width: 100%;
-        }
-    }
-
-    @media (min-width: 769px) {
-        .center-image {
-            justify-content: flex-end; /* Keep logo on the right for desktop */
-            padding-right: 40px; /* Adjust padding for desktop */
-        }
-        .center-text {
-            font-size: 1.2rem;
         }
     }
     </style>
@@ -385,12 +380,16 @@ if page == "Home":
     </div>
     """, unsafe_allow_html=True)
 
-    # Display the logo shifted to the right
-    st.markdown('<div class="logo-container">', unsafe_allow_html=True)
-    st.markdown('<div class="center-image">', unsafe_allow_html=True)
-    st.image("logo_transparent.png")  # Width is controlled via CSS
+    # Display the logo with manual positioning
+    st.markdown('<div class="logo-container clearfix">', unsafe_allow_html=True)
+
+    # Logo on the right (change 'logo-right' to 'logo-left' if you want it on the left)
+    st.markdown('<div class="logo-right">', unsafe_allow_html=True)
+    st.image("logo_transparent.png", width=200)  # You can change the width here
     st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown('<h3 class="center-text">Echolens: Turning Videos into Stories with AI</h3>', unsafe_allow_html=True)
+
+    # Title below the logo
+    st.markdown('<h3 style="text-align: center;">Echolens: Turning Videos into Stories with AI</h3>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
     # Set the title of the app
