@@ -93,7 +93,7 @@ st.markdown("""
     /* Class to move logo to the right */
     .logo-right {
         float: right;
-        margin-right: 200px; /* Adjust this to control how far from the right edge */
+        margin-right: 1px; /* Adjust this to control how far from the right edge */
     }
 
     /* Class to move logo to the left */
