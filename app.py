@@ -82,7 +82,9 @@ st.markdown("""
     .center-image {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-end; /* Move logo to the right */
+        width: 100%;
+        max-width: 800px; /* Match the content container width */
         margin-bottom: 10px;
     }
     .center-image img {
