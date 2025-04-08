@@ -13,7 +13,7 @@ import numpy as np
 import av
 import torch
 from ultralytics import YOLO
-from transformers import VivitForVideoClassification, VivitImageProcessor
+from transformers import VivitForVideoClassification, VivitImageProcessor  # Corrected import
 from transformers import MarianMTModel, MarianTokenizer  # Imports for translation
 import google.generativeai as genai
 import os
