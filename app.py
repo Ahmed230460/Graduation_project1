@@ -29,6 +29,11 @@ st.markdown("""
         background: linear-gradient(135deg, #1E1E1E, #121212);
         color: white;
         font-family: 'Poppins', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
     }
 
     /* General Styles for Headings */
@@ -69,20 +74,19 @@ st.markdown("""
 
     /* Logo Container */
     .logo-container {
-        position: absolute;
-        top: 20px;
-        left: 300px;
         display: flex;
         flex-direction: column;
-        z-index: 999;
+        align-items: center;
+        margin-bottom: 20px;
     }
     .center-image {
         display: flex;
         align-items: center;
+        justify-content: center;
         margin-bottom: 10px;
     }
     .center-image img {
-        width: 300px;
+        width: 200px;
         height: auto;
         max-width: 100%;
         transition: transform 0.3s ease;
@@ -97,11 +101,13 @@ st.markdown("""
 
     /* Content Container */
     .content-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
+        max-width: 800px;
         padding: 20px;
-        margin-top: 150px;
     }
 
     /* Instructions Icon and Popup */
@@ -186,6 +192,8 @@ st.markdown("""
         margin: 20px 0;
         border: 2px solid transparent;
         border-image: linear-gradient(45deg, #FF4B4B, #D32F2F) 1;
+        width: 100%;
+        max-width: 500px;
     }
     .stFileUploader {
         background: transparent !important;
@@ -284,6 +292,7 @@ st.markdown("""
         border-radius: 10px 10px 0 0;
         box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.2);
         border-top: 1px solid #FF4B4B;
+        width: 100%;
     }
     a {
         color: #FF4B4B;
@@ -298,18 +307,6 @@ st.markdown("""
 # Navigation Sidebar (without the logo)
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Home", "About Us", "Contact Us"])
-
-# Function to display the logo at the top of each page
-def display_logo():
-    st.markdown('<div class="logo-container">', unsafe_allow_html=True)
-    st.markdown('<div class="center-image">', unsafe_allow_html=True)
-    st.image("logo_transparent.png")  # Width is controlled via CSS
-    st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown('<h3 class="center-text">Echolens: Turning Videos into Stories with AI</h3>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
-# Display the logo on every page
-display_logo()
 
 # Home Page
 if page == "Home":
@@ -332,6 +329,14 @@ if page == "Home":
         </p>
     </div>
     """, unsafe_allow_html=True)
+
+    # Display the logo centered
+    st.markdown('<div class="logo-container">', unsafe_allow_html=True)
+    st.markdown('<div class="center-image">', unsafe_allow_html=True)
+    st.image("logo_transparent.png")  # Width is controlled via CSS
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<h3 class="center-text">Echolens: Turning Videos into Stories with AI</h3>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # Set the title of the app
     st.title("Video Story Generator")
