@@ -46,14 +46,12 @@ st.markdown("""
         color: white !important;
     }
     .logo-container {
-        width: 100vw;  /* Full viewport width */
-        position: relative;  /* Change to relative */
+        position: absolute;  /* استخدام absolute لتحديد الموقع بدقة */
+        top: 20px;  /* المسافة من أعلى الصفحة */
+        left: 300px;  /* المسافة من الشمال (تحريك اللوجو لليمين) */
         display: flex;
         flex-direction: column;
-        align-items: center;
-        z-index: 999;  /* Ensure it stays above other elements */
-        padding: 20px 0;
-        transform: translateX(300px);  /* إزاحة اللوجو والتاجلاين لليمين */
+        z-index: 999;  /* التأكد إن اللوجو فوق العناصر التانية */
     }
     .center-image {
         display: flex;
@@ -74,7 +72,7 @@ st.markdown("""
         max-width: 1200px;  /* Limit the width of the main content */
         margin: 0 auto;  /* Center the content within the main area */
         padding: 0 20px;
-        margin-top: 0;  /* Adjust space below the logo */
+        margin-top: 150px;  /* مسافة كافية عشان المحتوى ما يتداخلش مع اللوجو */
     }
     .sidebar .sidebar-content {
         background-color: #2A2A2A;
