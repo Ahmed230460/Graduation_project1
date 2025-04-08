@@ -26,7 +26,7 @@ from collections import Counter
 st.markdown("""
     <style>
     .stApp {
-        background-color: #1E1E1E;
+        background: linear-gradient(135deg, #1E1E1E, #121212);
         color: white;
         font-family: 'Poppins', sans-serif;
     }
@@ -36,9 +36,35 @@ st.markdown("""
         color: #FF4B4B;
         text-align: center;
         transition: transform 0.3s ease;
+        animation: fadeIn 1s ease-in-out;
+    }
+    h1 {
+        background: linear-gradient(45deg, #FF4B4B, #D32F2F);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 10px rgba(255, 75, 75, 0.5);
+        position: relative;
+        margin-bottom: 40px;
+    }
+    h1::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(45deg, #FF4B4B, #D32F2F);
+        border-radius: 2px;
     }
     h1:hover, h2:hover, h3:hover {
         transform: scale(1.05);
+    }
+
+    /* Fade-in Animation */
+    @keyframes fadeIn {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
     }
 
     /* Logo Container */
@@ -62,7 +88,7 @@ st.markdown("""
         transition: transform 0.3s ease;
     }
     .center-image img:hover {
-        transform: rotate(5deg);
+        transform: translateY(-5px);
     }
     .center-text {
         text-align: center;
@@ -78,22 +104,29 @@ st.markdown("""
         margin-top: 150px;
     }
 
-    /* Instructions Button and Popup */
-    .instructions-btn {
+    /* Instructions Icon and Popup */
+    .instructions-icon {
+        position: fixed;
+        top: 20px;
+        right: 20px;
         background: linear-gradient(45deg, #FF4B4B, #D32F2F);
         color: white;
-        padding: 10px 20px;
-        border-radius: 25px;
-        border: none;
-        cursor: pointer;
-        font-size: 16px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
         font-weight: bold;
-        display: inline-block;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .instructions-btn:hover {
-        transform: translateY(-3px);
+        cursor: pointer;
         box-shadow: 0 5px 15px rgba(255, 75, 75, 0.4);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        z-index: 1001;
+    }
+    .instructions-icon:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(255, 75, 75, 0.6);
     }
     .instructions-popup {
         display: none;
@@ -103,12 +136,13 @@ st.markdown("""
         transform: translate(-50%, -50%);
         background: linear-gradient(135deg, #2A2A2A, #1E1E1E);
         color: white;
-        padding: 20px;
+        padding: 30px;
         border-radius: 15px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         z-index: 1000;
-        width: 400px;
+        width: 450px;
         text-align: left;
+        border: 1px solid #FF4B4B;
     }
     .instructions-popup.show {
         display: block;
@@ -116,6 +150,12 @@ st.markdown("""
     .instructions-popup h4 {
         margin-top: 0;
         color: #FF4B4B;
+        font-size: 20px;
+        border-bottom: 1px solid #FF4B4B;
+        padding-bottom: 10px;
+    }
+    .instructions-popup p {
+        line-height: 1.6;
     }
     .close-btn {
         position: absolute;
@@ -125,34 +165,53 @@ st.markdown("""
         color: white;
         border: none;
         border-radius: 50%;
-        width: 25px;
-        height: 25px;
+        width: 30px;
+        height: 30px;
         cursor: pointer;
-        font-size: 14px;
-        line-height: 25px;
+        font-size: 16px;
+        line-height: 30px;
         text-align: center;
+        transition: background 0.3s ease;
     }
     .close-btn:hover {
         background: #D32F2F;
     }
 
-    /* File Uploader */
-    .stFileUploader {
-        background-color: #2A2A2A;
+    /* File Uploader Card */
+    .file-uploader-card {
+        background: linear-gradient(135deg, #2A2A2A, #1E1E1E);
         padding: 20px;
-        border-radius: 10px;
+        border-radius: 15px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         margin: 20px 0;
+        border: 2px solid transparent;
+        border-image: linear-gradient(45deg, #FF4B4B, #D32F2F) 1;
+    }
+    .stFileUploader {
+        background: transparent !important;
     }
     .stFileUploader label {
         color: white !important;
         font-size: 18px !important;
         font-weight: bold !important;
     }
+    .stFileUploader div[role="button"] {
+        background: linear-gradient(45deg, #FF4B4B, #D32F2F) !important;
+        color: white !important;
+        border-radius: 10px !important;
+        padding: 10px 20px !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    }
+    .stFileUploader div[role="button"]:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 5px 15px rgba(255, 75, 75, 0.4) !important;
+    }
 
     /* Expander (Video Details and Processing Results) */
     .stExpander {
-        background-color: #2A2A2A;
+        background: linear-gradient(135deg, #2A2A2A, #1E1E1E);
         border: 1px solid #FF4B4B;
         border-radius: 10px;
         margin: 10px 0;
@@ -195,18 +254,19 @@ st.markdown("""
 
     /* Sidebar */
     .sidebar .sidebar-content {
-        background-color: #2A2A2A;
+        background: linear-gradient(135deg, #2A2A2A, #1E1E1E);
         text-align: center;
     }
 
     /* Developer Card */
     .developer-card {
-        background-color: #2A2A2A;
+        background: linear-gradient(135deg, #2A2A2A, #1E1E1E);
         padding: 20px;
         border-radius: 10px;
         text-align: center;
         margin: 10px;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        border: 1px solid #FF4B4B;
     }
     .developer-card img {
         border-radius: 50%;
@@ -219,10 +279,11 @@ st.markdown("""
     .footer {
         text-align: center;
         padding: 20px;
-        background-color: #2A2A2A;
+        background: linear-gradient(135deg, #2A2A2A, #1E1E1E);
         margin-top: 40px;
         border-radius: 10px 10px 0 0;
         box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.2);
+        border-top: 1px solid #FF4B4B;
     }
     a {
         color: #FF4B4B;
@@ -255,11 +316,11 @@ if page == "Home":
     # Wrap the rest of the content in a centered container
     st.markdown('<div class="content-container">', unsafe_allow_html=True)
 
-    # Instructions Button and Popup
+    # Instructions Icon and Popup
     st.markdown("""
-    <button class="instructions-btn" onclick="document.getElementById('instructions-popup').classList.toggle('show')">
-        Usage Instructions
-    </button>
+    <div class="instructions-icon" onclick="document.getElementById('instructions-popup').classList.toggle('show')">
+        ?
+    </div>
     <div id="instructions-popup" class="instructions-popup">
         <button class="close-btn" onclick="document.getElementById('instructions-popup').classList.remove('show')">×</button>
         <h4>Usage Instructions</h4>
@@ -275,8 +336,10 @@ if page == "Home":
     # Set the title of the app
     st.title("Video Story Generator")
 
-    # File uploader for video input
+    # File uploader for video input wrapped in a card
+    st.markdown('<div class="file-uploader-card">', unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Upload Video", type=["mp4", "avi"])
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # Main function to handle the app logic
     def main():
