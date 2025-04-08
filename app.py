@@ -13,11 +13,12 @@ import av
 import torch
 from ultralytics import YOLO
 from transformers import VivitForVideoClassification, VivitImageProcessor
-from transformers import MarianMTModel, MarianTokenizer  # Add these imports for translation
+from transformers import MarianMTModel, MarianTokenizer  # Imports for translation
 import google.generativeai as genai
 import os
 import io
 from PIL import Image
+from google.api_core.exceptions import ResourceExhausted
 
 # Add custom CSS for styling the UI
 st.markdown("""
@@ -178,7 +179,11 @@ def anomaly_detection(video_path, processor, vivit_model):
 def generate_story(video_path, prediction, gemini_model):
     cap = cv2.VideoCapture(video_path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    step = max(1, total_frames // 15)
+    if total_frames == 0:
+        return f"A video classified as '{prediction}' was processed, but no story could be generated due to an empty video."
+
+    # Reduce the number of frames to describe to avoid quota issues
+    step = max(1, total_frames // 3)  # Extract only 3 frames
     frames = []
     frame_idx = 0
 
@@ -186,7 +191,7 @@ def generate_story(video_path, prediction, gemini_model):
         ret, frame = cap.read()
         if not ret:
             break
-        if frame_idx % step == 0:
+        if frame_idx % step == 0 and len(frames) < 3:  # Limit to 3 frames
             frame_path = f"frame_{frame_idx}.jpg"
             cv2.imwrite(frame_path, frame)
             frames.append(frame_path)
@@ -196,14 +201,29 @@ def generate_story(video_path, prediction, gemini_model):
     descriptions = {}
     for frame_path in frames:
         prompt = f"This frame is from a video classified as '{prediction}'. Describe the event in one sentence in English."
-        with open(frame_path, "rb") as img_file:
-            image_data = Image.open(io.BytesIO(img_file.read()))
-        response = gemini_model.generate_content([prompt, image_data])
-        descriptions[frame_path] = response.text
+        try:
+            with open(frame_path, "rb") as img_file:
+                image_data = Image.open(io.BytesIO(img_file.read()))
+            response = gemini_model.generate_content([prompt, image_data])
+            descriptions[frame_path] = response.text
+        except ResourceExhausted as e:
+            st.error("Gemini API quota exceeded. Please try again later or upgrade your API plan.")
+            return f"A video classified as '{prediction}' was processed, but the story could not be generated due to API quota limits."
+        except Exception as e:
+            st.error(f"Error generating description for frame: {str(e)}")
+            descriptions[frame_path] = f"Could not describe this frame due to an error."
 
-    summary_prompt = "Here are multiple descriptions of frames from a video in English:\n" + "\n".join(descriptions.values()) + "\nProvide a concise summary of the overall event in English."
-    summary_response = gemini_model.generate_content(summary_prompt)
-    return summary_response.text
+    # Generate the summary
+    try:
+        summary_prompt = "Here are multiple descriptions of frames from a video in English:\n" + "\n".join(descriptions.values()) + "\nProvide a concise summary of the overall event in English."
+        summary_response = gemini_model.generate_content(summary_prompt)
+        return summary_response.text
+    except ResourceExhausted as e:
+        st.error("Gemini API quota exceeded while summarizing. Please try again later or upgrade your API plan.")
+        return f"A video classified as '{prediction}' was processed, but the story could not be fully generated due to API quota limits."
+    except Exception as e:
+        st.error(f"Error generating story summary: {str(e)}")
+        return f"A video classified as '{prediction}' was processed, but the story could not be summarized due to an error."
 
 # Function to translate text using MarianMT
 @st.cache_resource
@@ -287,10 +307,12 @@ def main():
                         # Translate the story to the target language
                         with st.spinner(f"Translating to {language_names[lang]}..."):
                             translated_story = translate_text(story, lang)
-                            translations[lang] = translated_story
-                    # Display the translated story
-                    st.write(f"Story ({language_names[lang]}):")
-                    st.write(translations[lang])
+                            if translated_story:
+                                translations[lang] = translated_story
+                    # Display the translated story if available
+                    if lang in translations:
+                        st.write(f"Story ({language_names[lang]}):")
+                        st.write(translations[lang])
 
         # Add a download button for the story (English version)
         st.download_button(
