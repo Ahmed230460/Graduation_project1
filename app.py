@@ -104,7 +104,7 @@ page = st.sidebar.radio("Go to", ["Home", "About Us", "Contact Us"])
 # Function to display the logo at the top of each page
 def display_logo():
     st.markdown('<div class="center-image">', unsafe_allow_html=True)
-    st.image("logo_transparent.png", width=300)  # Centered logo
+    st.image("logo_transparent.png", width=500)  # Centered logo
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Home Page
