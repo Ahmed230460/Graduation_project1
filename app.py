@@ -4,7 +4,7 @@ app.py
 
 This is the main application file for the Video Story Generator.
 It processes uploaded videos, detects anomalies, generates a story, provides translation options,
-and displays detailed information about the video and detected objects.
+and displays detailed information about the video, including frame counts and detected objects.
 """
 
 import streamlit as st
@@ -76,15 +76,16 @@ def load_models():
 
     return yolo_model, processor, vivit_model, gemini_model
 
-# Function to calculate video duration in seconds
-def get_video_duration(video_path):
+# Function to calculate video duration and frame count
+def get_video_info(video_path):
     cap = cv2.VideoCapture(video_path)
     fps = cap.get(cv2.CAP_PROP_FPS)
     frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     cap.release()
     if fps == 0:
-        return 0
-    return frame_count / fps
+        return 0, frame_count
+    duration = frame_count / fps
+    return duration, frame_count
 
 # Function to preprocess the video (resize and normalize)
 def preprocess_video(input_path, output_path, target_size=(224, 224)):
@@ -300,8 +301,8 @@ def main():
         with st.spinner("Processing..."):
             yolo_model, processor, vivit_model, gemini_model = load_models()
             
-            # Calculate original video duration
-            original_duration = get_video_duration("input_video.mp4")
+            # Calculate original video duration and frame count
+            original_duration, original_frame_count = get_video_info("input_video.mp4")
             
             # Preprocess the video
             preprocessed_video = preprocess_video("input_video.mp4", "preprocessed_video.mp4")
@@ -309,8 +310,8 @@ def main():
             # Extract keyframes and collect event timings and objects
             keyframes_video, event_timestamps, object_counts, saved_frames = extract_keyframes(preprocessed_video, yolo_model)
             
-            # Calculate keyframes video duration
-            keyframes_duration = get_video_duration(keyframes_video) if keyframes_video else 0
+            # Calculate keyframes video duration and frame count
+            keyframes_duration, keyframes_frame_count = get_video_info(keyframes_video) if keyframes_video else (0, 0)
             
             # Detect anomaly
             prediction = anomaly_detection(keyframes_video, processor, vivit_model)
@@ -325,7 +326,9 @@ def main():
         with st.expander("Video Details"):
             st.subheader("Video Information")
             st.write(f"**Original Video Duration**: {original_duration:.2f} seconds")
+            st.write(f"**Original Video Frame Count**: {original_frame_count}")
             st.write(f"**Keyframes Video Duration**: {keyframes_duration:.2f} seconds")
+            st.write(f"**Keyframes Video Frame Count**: {keyframes_frame_count}")
             st.write("**Event Timings (seconds)**:")
             if event_timestamps:
                 for i, timestamp in enumerate(event_timestamps, 1):
