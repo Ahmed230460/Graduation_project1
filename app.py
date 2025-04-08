@@ -58,6 +58,10 @@ st.markdown("""
         justify-content: center;
         align-items: center;
         margin-bottom: 20px;
+        max-width: 100%;  /* Ensure the image doesn't overflow on smaller screens */
+    }
+    .center-image img {
+        max-width: 100%;  /* Ensure the image scales down on smaller screens */
     }
     .center-text {
         text-align: center;
@@ -104,7 +108,7 @@ page = st.sidebar.radio("Go to", ["Home", "About Us", "Contact Us"])
 # Function to display the logo at the top of each page
 def display_logo():
     st.markdown('<div class="center-image">', unsafe_allow_html=True)
-    st.image("logo_transparent.png", width=700)  # Centered logo
+    st.image("logo_transparent.png", width=300)  # Adjusted logo size
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Home Page
