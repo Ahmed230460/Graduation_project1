@@ -49,13 +49,12 @@ st.markdown("""
         width: 100vw;  /* Full viewport width */
         position: fixed;  /* Fix the position to the top */
         top: 0;
-        left: 0;
+        left: 300px;  /* إزاحة اللوجو والتاجلاين لليمين */
         display: flex;
         flex-direction: column;
         align-items: center;
         z-index: 999;  /* Ensure it stays above other elements */
         padding: 20px 0;
-        margin-left: 300px;  /* إزاحة اللوجو والتاجلاين لليمين */
     }
     .center-image {
         display: flex;
