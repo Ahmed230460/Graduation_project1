@@ -13,7 +13,7 @@ import numpy as np
 import av
 import torch
 from ultralytics import YOLO
-from transformers import VivitForVideoClassification, VivitImageProcessor  # Corrected import
+from transformers import VivitForVideoClassification, VivitImageProcessor
 from transformers import MarianMTModel, MarianTokenizer  # Imports for translation
 import google.generativeai as genai
 import os
@@ -45,12 +45,23 @@ st.markdown("""
     .stFileUploader label {
         color: white !important;
     }
+    .center-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
     .center-image {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 20px;  /* Add some top margin */
-        margin-bottom: 30px;  /* Add spacing between logo and content below */
+        margin-bottom: 20px;
+    }
+    .center-text {
+        text-align: center;
+        width: 100%;
     }
     .sidebar .sidebar-content {
         background-color: #2A2A2A;
@@ -93,16 +104,16 @@ page = st.sidebar.radio("Go to", ["Home", "About Us", "Contact Us"])
 # Function to display the logo at the top of each page
 def display_logo():
     st.markdown('<div class="center-image">', unsafe_allow_html=True)
-    st.image("logo_transparent.png", width=200)  # Centered logo at the top
+    st.image("logo_transparent.png", width=200)  # Centered logo
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Home Page
 if page == "Home":
-    # Display the logo at the top
+    # Center the logo and tagline together
+    st.markdown('<div class="center-container">', unsafe_allow_html=True)
     display_logo()
-
-    # Tagline
-    st.markdown("<h3>Echolens: Turning Videos into Stories with AI</h3>", unsafe_allow_html=True)
+    st.markdown('<h3 class="center-text">Echolens: Turning Videos into Stories with AI</h3>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # Display user instructions
     st.markdown("""
@@ -445,10 +456,12 @@ if page == "Home":
 
 # About Us Page
 elif page == "About Us":
-    # Display the logo at the top
+    # Center the logo and title together
+    st.markdown('<div class="center-container">', unsafe_allow_html=True)
     display_logo()
+    st.markdown('<h1 class="center-text">About Us</h1>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    st.title("About Us")
     st.markdown("""
     We are the team behind **Echolens**, a project dedicated to transforming videos into meaningful stories using AI. Our team consists of passionate developers and researchers working together to push the boundaries of video analysis and storytelling.
     """)
@@ -489,10 +502,12 @@ elif page == "About Us":
 
 # Contact Us Page
 elif page == "Contact Us":
-    # Display the logo at the top
+    # Center the logo and title together
+    st.markdown('<div class="center-container">', unsafe_allow_html=True)
     display_logo()
+    st.markdown('<h1 class="center-text">Contact Us</h1>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    st.title("Contact Us")
     st.markdown("""
     Have questions or feedback? We'd love to hear from you! Reach out to us through the following channels.
     """)
