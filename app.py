@@ -52,7 +52,7 @@ st.markdown("""
 
 # Display the logo at the top
 st.markdown('<div class="center-image">', unsafe_allow_html=True)
-st.image("logo.png", width=200)  # Adjust width as needed
+st.image("logo.jpg", width=200)  # Changed from logo.png to logo.jpg
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Display user instructions
