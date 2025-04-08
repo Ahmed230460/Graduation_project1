@@ -85,19 +85,24 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# Navigation Sidebar
+# Navigation Sidebar (without the logo)
 st.sidebar.title("Navigation")
-# Center the logo in the sidebar
-st.sidebar.markdown('<div class="center-image">', unsafe_allow_html=True)
-st.sidebar.image("logo_transparent.png", width=150)  # Updated to use transparent logo
-st.sidebar.markdown('</div>', unsafe_allow_html=True)
 page = st.sidebar.radio("Go to", ["Home", "About Us", "Contact Us"])
 
-# Tagline
-st.markdown("<h3>Echolens: Turning Videos into Stories with AI</h3>", unsafe_allow_html=True)
+# Function to display the logo at the top of each page
+def display_logo():
+    st.markdown('<div class="center-image">', unsafe_allow_html=True)
+    st.image("logo_transparent.png", width=200)  # Centered logo at the top
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # Home Page
 if page == "Home":
+    # Display the logo at the top
+    display_logo()
+
+    # Tagline
+    st.markdown("<h3>Echolens: Turning Videos into Stories with AI</h3>", unsafe_allow_html=True)
+
     # Display user instructions
     st.markdown("""
     ### Usage Instructions
@@ -439,6 +444,9 @@ if page == "Home":
 
 # About Us Page
 elif page == "About Us":
+    # Display the logo at the top
+    display_logo()
+
     st.title("About Us")
     st.markdown("""
     We are the team behind **Echolens**, a project dedicated to transforming videos into meaningful stories using AI. Our team consists of passionate developers and researchers working together to push the boundaries of video analysis and storytelling.
@@ -480,6 +488,9 @@ elif page == "About Us":
 
 # Contact Us Page
 elif page == "Contact Us":
+    # Display the logo at the top
+    display_logo()
+
     st.title("Contact Us")
     st.markdown("""
     Have questions or feedback? We'd love to hear from you! Reach out to us through the following channels.
