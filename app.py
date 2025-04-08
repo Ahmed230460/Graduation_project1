@@ -45,27 +45,28 @@ st.markdown("""
     .stFileUploader label {
         color: white !important;
     }
-    .center-container {
-        width: 100vw;  /* Use the full viewport width */
-        position: relative;
-        left: 50%;
-        transform: translateX(-50%);  /* Center the container relative to the viewport */
+    .logo-container {
+        width: 100vw;  /* Full viewport width */
+        position: fixed;  /* Fix the position to the top */
+        top: 0;
+        left: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin-top: 20px;
-        margin-bottom: 30px;
+        z-index: 999;  /* Ensure it stays above other elements */
+        padding: 20px 0;
     }
     .center-image {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 20px;
-        max-width: 100%;  /* Ensure the image doesn't overflow on smaller screens */
+        margin-bottom: 10px;
     }
     .center-image img {
-        max-width: 100%;  /* Ensure the image scales down on smaller screens */
+        width: 300px;  /* Set a fixed width */
+        height: auto;  /* Maintain aspect ratio */
+        max-width: 100%;  /* Ensure it scales down on smaller screens */
     }
     .center-text {
         text-align: center;
@@ -76,6 +77,7 @@ st.markdown("""
         max-width: 1200px;  /* Limit the width of the main content */
         margin: 0 auto;  /* Center the content within the main area */
         padding: 0 20px;
+        margin-top: 150px;  /* Add space below the fixed logo */
     }
     .sidebar .sidebar-content {
         background-color: #2A2A2A;
@@ -117,18 +119,18 @@ page = st.sidebar.radio("Go to", ["Home", "About Us", "Contact Us"])
 
 # Function to display the logo at the top of each page
 def display_logo():
+    st.markdown('<div class="logo-container">', unsafe_allow_html=True)
     st.markdown('<div class="center-image">', unsafe_allow_html=True)
-    st.image("logo_transparent.png", width=300)  # Adjusted logo size
+    st.image("logo_transparent.png")  # Width is controlled via CSS
     st.markdown('</div>', unsafe_allow_html=True)
-
-# Home Page
-if page == "Home":
-    # Center the logo across the entire page
-    st.markdown('<div class="center-container">', unsafe_allow_html=True)
-    display_logo()
     st.markdown('<h3 class="center-text">Echolens: Turning Videos into Stories with AI</h3>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
+# Display the logo on every page
+display_logo()
+
+# Home Page
+if page == "Home":
     # Wrap the rest of the content in a centered container
     st.markdown('<div class="content-container">', unsafe_allow_html=True)
 
@@ -475,18 +477,13 @@ if page == "Home":
 
 # About Us Page
 elif page == "About Us":
-    # Center the logo across the entire page
-    st.markdown('<div class="center-container">', unsafe_allow_html=True)
-    display_logo()
-    st.markdown('<h1 class="center-text">About Us</h1>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
     # Wrap the rest of the content in a centered container
     st.markdown('<div class="content-container">', unsafe_allow_html=True)
 
     st.markdown("""
+    <h1 style="text-align: center;">About Us</h1>
     We are the team behind **Echolens**, a project dedicated to transforming videos into meaningful stories using AI. Our team consists of passionate developers and researchers working together to push the boundaries of video analysis and storytelling.
-    """)
+    """, unsafe_allow_html=True)
 
     # Developer Profiles (Placeholder Data)
     st.subheader("Meet Our Team")
@@ -526,18 +523,13 @@ elif page == "About Us":
 
 # Contact Us Page
 elif page == "Contact Us":
-    # Center the logo across the entire page
-    st.markdown('<div class="center-container">', unsafe_allow_html=True)
-    display_logo()
-    st.markdown('<h1 class="center-text">Contact Us</h1>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
     # Wrap the rest of the content in a centered container
     st.markdown('<div class="content-container">', unsafe_allow_html=True)
 
     st.markdown("""
+    <h1 style="text-align: center;">Contact Us</h1>
     Have questions or feedback? We'd love to hear from you! Reach out to us through the following channels.
-    """)
+    """, unsafe_allow_html=True)
 
     st.subheader("Get in Touch")
     st.write("📧 **Email**: contact@echolens.com")
