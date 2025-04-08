@@ -28,30 +28,27 @@ st.markdown("""
     .stApp {
         background-color: #1E1E1E;
         color: white;
-        font-family: 'Arial', sans-serif;
+        font-family: 'Poppins', sans-serif;
     }
+
+    /* General Styles for Headings */
     h1, h2, h3 {
         color: #FF4B4B;
         text-align: center;
+        transition: transform 0.3s ease;
     }
-    .stButton>button {
-        background-color: #FF4B4B;
-        color: white;
-        border-radius: 10px;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
+    h1:hover, h2:hover, h3:hover {
+        transform: scale(1.05);
     }
-    .stFileUploader label {
-        color: white !important;
-    }
+
+    /* Logo Container */
     .logo-container {
-        position: absolute;  /* استخدام absolute لتحديد الموقع بدقة */
-        top: 20px;  /* المسافة من أعلى الصفحة */
-        left: 300px;  /* المسافة من الشمال (تحريك اللوجو لليمين) */
+        position: absolute;
+        top: 20px;
+        left: 300px;
         display: flex;
         flex-direction: column;
-        z-index: 999;  /* التأكد إن اللوجو فوق العناصر التانية */
+        z-index: 999;
     }
     .center-image {
         display: flex;
@@ -59,31 +56,157 @@ st.markdown("""
         margin-bottom: 10px;
     }
     .center-image img {
-        width: 300px;  /* Set a fixed width */
-        height: auto;  /* Maintain aspect ratio */
-        max-width: 100%;  /* Ensure it scales down on smaller screens */
+        width: 300px;
+        height: auto;
+        max-width: 100%;
+        transition: transform 0.3s ease;
+    }
+    .center-image img:hover {
+        transform: rotate(5deg);
     }
     .center-text {
         text-align: center;
         width: 100%;
     }
+
+    /* Content Container */
     .content-container {
         width: 100%;
-        max-width: 1200px;  /* Limit the width of the main content */
-        margin: 0 auto;  /* Center the content within the main area */
-        padding: 0 20px;
-        margin-top: 150px;  /* مسافة كافية عشان المحتوى ما يتداخلش مع اللوجو */
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        margin-top: 150px;
     }
+
+    /* Instructions Button and Popup */
+    .instructions-btn {
+        background: linear-gradient(45deg, #FF4B4B, #D32F2F);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        display: inline-block;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .instructions-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(255, 75, 75, 0.4);
+    }
+    .instructions-popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #2A2A2A, #1E1E1E);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        width: 400px;
+        text-align: left;
+    }
+    .instructions-popup.show {
+        display: block;
+    }
+    .instructions-popup h4 {
+        margin-top: 0;
+        color: #FF4B4B;
+    }
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #FF4B4B;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        font-size: 14px;
+        line-height: 25px;
+        text-align: center;
+    }
+    .close-btn:hover {
+        background: #D32F2F;
+    }
+
+    /* File Uploader */
+    .stFileUploader {
+        background-color: #2A2A2A;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        margin: 20px 0;
+    }
+    .stFileUploader label {
+        color: white !important;
+        font-size: 18px !important;
+        font-weight: bold !important;
+    }
+
+    /* Expander (Video Details and Processing Results) */
+    .stExpander {
+        background-color: #2A2A2A;
+        border: 1px solid #FF4B4B;
+        border-radius: 10px;
+        margin: 10px 0;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+    .stExpander summary {
+        background: linear-gradient(45deg, #FF4B4B, #D32F2F);
+        color: white;
+        padding: 10px;
+        border-radius: 10px 10px 0 0;
+        font-weight: bold;
+    }
+    .stExpander div {
+        padding: 15px;
+    }
+
+    /* Buttons */
+    .stButton>button {
+        background: linear-gradient(45deg, #FF4B4B, #D32F2F);
+        color: white;
+        border-radius: 10px;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .stButton>button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(255, 75, 75, 0.4);
+    }
+
+    /* Translation Buttons Grid */
+    .translate-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+        margin: 20px 0;
+    }
+
+    /* Sidebar */
     .sidebar .sidebar-content {
         background-color: #2A2A2A;
         text-align: center;
     }
+
+    /* Developer Card */
     .developer-card {
         background-color: #2A2A2A;
         padding: 20px;
         border-radius: 10px;
         text-align: center;
         margin: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     }
     .developer-card img {
         border-radius: 50%;
@@ -91,12 +214,15 @@ st.markdown("""
         height: 100px;
         object-fit: cover;
     }
+
+    /* Footer */
     .footer {
         text-align: center;
         padding: 20px;
         background-color: #2A2A2A;
         margin-top: 40px;
         border-radius: 10px 10px 0 0;
+        box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.2);
     }
     a {
         color: #FF4B4B;
@@ -104,35 +230,6 @@ st.markdown("""
     }
     a:hover {
         text-decoration: underline;
-    }
-    /* Hover effect for Usage Instructions */
-    .instructions-container {
-        position: relative !important;
-        display: inline-block !important;
-    }
-    .instructions-title {
-        color: #FF4B4B !important;
-        cursor: pointer !important;
-        margin: 0 !important;
-    }
-    .instructions-tooltip {
-        visibility: hidden !important;
-        width: 300px !important;
-        background-color: #2A2A2A !important;
-        color: white !important;
-        text-align: left !important;
-        padding: 10px !important;
-        border-radius: 5px !important;
-        position: absolute !important;
-        z-index: 1000 !important;
-        top: 100% !important;
-        left: 0 !important;
-        opacity: 0 !important;
-        transition: opacity 0.3s !important;
-    }
-    .instructions-container:hover .instructions-tooltip {
-        visibility: visible !important;
-        opacity: 1 !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -158,16 +255,20 @@ if page == "Home":
     # Wrap the rest of the content in a centered container
     st.markdown('<div class="content-container">', unsafe_allow_html=True)
 
-    # Display user instructions with hover effect
+    # Instructions Button and Popup
     st.markdown("""
-    <div class="instructions-container">
-        <h3 class="instructions-title">Usage Instructions</h3>
-        <span class="instructions-tooltip">
+    <button class="instructions-btn" onclick="document.getElementById('instructions-popup').classList.toggle('show')">
+        Usage Instructions
+    </button>
+    <div id="instructions-popup" class="instructions-popup">
+        <button class="close-btn" onclick="document.getElementById('instructions-popup').classList.remove('show')">×</button>
+        <h4>Usage Instructions</h4>
+        <p>
             1. Upload a video (up to 200 MB) in MP4 or AVI format.<br>
             2. Wait for the video to be processed.<br>
             3. The results (classification, story, and video details) will appear below in English.<br>
             4. Use the buttons to translate the story into other languages.
-        </span>
+        </p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -243,6 +344,7 @@ if page == "Home":
             st.subheader("Translate Story")
             target_languages = ["es", "fr", "de", "ar"]
             language_names = {"es": "Spanish", "fr": "French", "de": "German", "ar": "Arabic"}
+            st.markdown('<div class="translate-buttons">', unsafe_allow_html=True)
             cols = st.columns(len(target_languages))  # Create columns for buttons
             translations = {}  # Store translations to avoid re-computing
 
@@ -259,6 +361,7 @@ if page == "Home":
                         if lang in translations:
                             st.write(f"Story ({language_names[lang]}):")
                             st.write(translations[lang])
+            st.markdown('</div>', unsafe_allow_html=True)
 
             # Add a download button for the story (English version)
             st.download_button(
