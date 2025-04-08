@@ -107,31 +107,32 @@ st.markdown("""
     }
     /* Hover effect for Usage Instructions */
     .instructions-container {
-        position: relative;
-        display: inline-block;
+        position: relative !important;
+        display: inline-block !important;
     }
     .instructions-title {
-        color: #FF4B4B;
-        cursor: pointer;
+        color: #FF4B4B !important;
+        cursor: pointer !important;
+        margin: 0 !important;
     }
     .instructions-tooltip {
-        visibility: hidden;
-        width: 300px;
-        background-color: #2A2A2A;
-        color: white;
-        text-align: left;
-        padding: 10px;
-        border-radius: 5px;
-        position: absolute;
-        z-index: 1;
-        top: 100%;
-        left: 0;
-        opacity: 0;
-        transition: opacity 0.3s;
+        visibility: hidden !important;
+        width: 300px !important;
+        background-color: #2A2A2A !important;
+        color: white !important;
+        text-align: left !important;
+        padding: 10px !important;
+        border-radius: 5px !important;
+        position: absolute !important;
+        z-index: 1000 !important;
+        top: 100% !important;
+        left: 0 !important;
+        opacity: 0 !important;
+        transition: opacity 0.3s !important;
     }
     .instructions-container:hover .instructions-tooltip {
-        visibility: visible;
-        opacity: 1;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     </style>
     """, unsafe_allow_html=True)
