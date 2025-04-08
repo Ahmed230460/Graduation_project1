@@ -46,18 +46,21 @@ st.markdown("""
         color: white !important;
     }
     .logo-container {
-        position: absolute;  /* استخدام absolute لتحديد الموقع بدقة */
-        top: 20px;  /* المسافة من أعلى الصفحة */
-        left: 300px;  /* المسافة من الشمال (تحريك اللوجو لليمين) */
         display: flex;
         flex-direction: column;
-        z-index: 999;  /* التأكد إن اللوجو فوق العناصر التانية */
+        align-items: center;
+        margin-top: 20px;
+        position: relative;
+        z-index: 999;
     }
+    
     .center-image {
         display: flex;
-        align-items: center;
+        justify-content: center;
         margin-bottom: 10px;
+        width: 100%;
     }
+
     .center-image img {
         width: 300px;  /* Set a fixed width */
         height: auto;  /* Maintain aspect ratio */
