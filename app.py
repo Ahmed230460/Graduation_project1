@@ -53,6 +53,7 @@ st.markdown("""
     }
     .sidebar .sidebar-content {
         background-color: #2A2A2A;
+        text-align: center;
     }
     .developer-card {
         background-color: #2A2A2A;
@@ -86,12 +87,11 @@ st.markdown("""
 
 # Navigation Sidebar
 st.sidebar.title("Navigation")
+# Center the logo in the sidebar
+st.sidebar.markdown('<div class="center-image">', unsafe_allow_html=True)
+st.sidebar.image("logo_transparent.png", width=150)  # Updated to use transparent logo
+st.sidebar.markdown('</div>', unsafe_allow_html=True)
 page = st.sidebar.radio("Go to", ["Home", "About Us", "Contact Us"])
-
-# Display the logo at the top
-st.markdown('<div class="center-image">', unsafe_allow_html=True)
-st.image("logo.jpg", width=200)
-st.markdown('</div>', unsafe_allow_html=True)
 
 # Tagline
 st.markdown("<h3>Echolens: Turning Videos into Stories with AI</h3>", unsafe_allow_html=True)
@@ -454,7 +454,7 @@ elif page == "About Us":
             <img src="https://via.placeholder.com/100" alt="Developer 1">
             <h4>Ahmed Mohamed</h4>
             <p><b>AI Model Developer</b></p>
-            <p>Ahmed is a senior computer science student specializing in machine learning and video analysis.</p>
+            <p>Ahmed is a senior computer science student specializing in machine learning.</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -502,7 +502,7 @@ elif page == "Contact Us":
 # Footer
 st.markdown("""
 <div class="footer">
-    <p>&copy; 2025 Echolens. All rights reserved.</p>
+    <p>© 2025 Echolens. All rights reserved.</p>
     <p><a href="https://github.com/echolens">GitHub</a> | <a href="mailto:contact@echolens.com">Email Us</a></p>
 </div>
 """, unsafe_allow_html=True)
